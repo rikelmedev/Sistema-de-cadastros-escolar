@@ -7,7 +7,6 @@ Set FOREIGN_KEY_CHECKS = 0;
 
 --
 --- CRIAÇÃO DO BANCO
---
 Drop DATABASE IF EXISTS escola (
   
 CREATE DATABASE escola
@@ -16,21 +15,22 @@ COLLATE utf8mb4_unicode_ci;
 
 USE escola;
 
+
+
 --
 -- Tabela disciplina
---
+CREATE TABLE disciplina (
+  coddisciplina INT NOT NULL
+  nome_disciplina VARCHAR(50) NOT NULL,
+  PRIMARY KEY (coddisciplina)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `aluno` (`matricula`, `nome`, `endereço`, `cidade`, `codcurso`) VALUES
-(2012, 'Rikelme', 'Jose luis goncalves', 'Palmares Paulista', 2),
-(2013, 'Luis', 'Rua Brasil', 'catanduva', 5),
-(2014, 'pedro', 'rua pau', 'Palmares Paulista', 6),
-(2015, 'daniela', 'rual escola', 'Catanduva', 4),
-(2016, 'Tiago', 'Rua da depre', 'Catanduva', 2),
-(2017, 'Bianca', 'Rua do cafe', 'Catanduva', 3);
-
--- --------------------------------------------------------
-
---
+-- Dados das disciplinas
+INSERT INTO disciplina(coddisciplina, nome_disciplina) VALUES
+(1, 'LTT'),
+(2, 'Banco de Dados'),
 -- Estrutura da tabela `curso`
 --
 
