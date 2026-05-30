@@ -1,0 +1,44 @@
+﻿<html>
+<head>
+<style>
+.pos{
+position:absolute;
+top:10px;
+left:250px;
+}
+</style>
+<title></title>
+</head>
+<body bgcolor="#585858">
+<table border="1" class="pos">
+	<tr>
+		<td height=400px><img src="cursos.jpg" width=900px></td>
+	</tr>
+	<tr>
+		<td width=900px bgcolor="#424242"><font color="#fff"><p align="center">Cadastro de Cursos</p></font></td>
+	</tr>
+<form action="cadcursos.php" method="POST">
+	<tr>
+		<td>Código do Curso:<input type="text" size="20" name="codcurso"></td>
+	</tr>
+	<tr>
+		<td>Nome do Curso:<input type="text" size="70" name="nomecurso"></td>
+	</tr>
+	<tr>
+		<td>Código da Disciplina1:<input type="text" size="20" name="coddisciplina1"></td>
+	</tr>
+	<tr>
+		<td>Código da Disciplina2:<input type="text" size="20" name="coddisciplina2"></td>
+	</tr>
+	<tr>
+		<td>Código da Disciplina3:<input type="text" size="20" name="coddisciplina3"></td>
+	</tr>
+	<tr>
+	<tr>
+<td><input type="submit" value="enviar">
+<a href="../excluir/excusao_curso.php"><input type="button" value="Limpar"></a></td>
+</tr>
+	
+</table>
+</body>
+</html>
