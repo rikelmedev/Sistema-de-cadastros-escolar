@@ -13,51 +13,73 @@
 $nome = $_POST['inicial'];
 $query = mysqli_query($conexao,"select * from aluno where nome like '%$nome%'   order by nome");
 	
-if (!$query)
-	{
+if (!$query){
 		die('Erro ao realizar a pesquisa. Tente novamente.');  
 	}
 
-//VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
-	if(mysqli_num_rows($query) == 0){
-	echo "<center><p>Nenhum aluno encontrado com o nome
-	      <strong>$nome</strong>.</p></center>";
-	
-		  } else {
-	
-    echo"<center>";
-	echo "<table border='1px'>";
-	echo "<tr>
-	        <th width='200px'>Nome</th>	
-			<th width='100px'>Matricula</th>
-	        <th width='250px'>Endereco</th>
-	        <th width='150px'>Cidade</th>
-	        <th width='100px'>cod.Curso</th>
-	     </tr>";
-
-	while($dados=mysqli_fetch_array($query)) {
-	
-		echo "<tr>";
-		echo "<td>". $dados['nome']      ."</td>";
-		echo "<td>". $dados['matricula'] ."</td>";
-		echo "<td>". $dados['endereco']  ."</td>";
-		echo "<td>". $dados['cidade']    ."</td>";
-		echo "<td>". $dados['codcurso']  ."</td>";		
-		echo "</tr>";
-		}
-
-	    echo "</table>";
-	    echo "</center>";
-        }
-		
-  mysqli_close($conexao);
-
+$total = mysqli_num_rows($query);
 ?>
-
-<br>
-<center>
-	<input type="button" onclick="window.location='index.php';" value="Voltar ao Menu">
-</center>
-
+ 
+<html>
+<head>
+  <title>Pesquisa de Alunos</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="container">
+ 
+  <div class="sys-header">
+    <div class="sys-logo">SE</div>
+    <div>
+      <div class="sys-title">Sistema Escolar</div>
+      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="page-header">
+      <h1>Pesquisa de Alunos <span class="badge"><?php echo $total; ?> resultado(s)</span></h1>
+      <p>Resultado para: <strong><?php echo $busca; ?></strong></p>
+    </div>
+ 
+    <?php if ($total == 0): ?>
+      <div class="msg msg-empty">
+        Nenhum aluno encontrado com o nome <strong><?php echo $busca; ?></strong>.
+      </div>
+    <?php else: ?>
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Endereço</th>
+            <th>Cidade</th>
+            <th>Cód. Curso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while ($dados = mysqli_fetch_array($query)): ?>
+          <tr>
+            <td><?php echo $dados['nome']; ?></td>
+            <td class="col-code"><?php echo $dados['matricula']; ?></td>
+            <td><?php echo $dados['endereco']; ?></td>
+            <td><?php echo $dados['cidade']; ?></td>
+            <td class="col-code"><?php echo $dados['codcurso']; ?></td>
+          </tr>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
+    <?php endif; ?>
+ 
+    <?php mysqli_close($conexao); ?>
+ 
+    <div class="divider"></div>
+    <div class="btn-group">
+      <a href="consulta_aluno.html" class="btn btn-ghost">Nova Pesquisa</a>
+      <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
+    </div>
+  </div>
+ 
+</div>
 </body>
 </html>
