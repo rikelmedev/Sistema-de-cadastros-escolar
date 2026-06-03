@@ -45,8 +45,7 @@ if (!$query) die('Erro ao consulta disciplinas. Tente Novamente.');
             <th>Nome da Disciplina</th>
           </tr>
         </thead>
-  </body>
-
+  <tbody>
 	<?php while($d = mysqli_fetch_array($query)): ?>
 		<tr>
 		  <td class="col-code"><?php echo $d['coddisciplina']; ?></td>
