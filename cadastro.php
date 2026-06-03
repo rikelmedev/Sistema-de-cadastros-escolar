@@ -11,6 +11,7 @@ $nome = $_POST['nome'];
 $endereco = $_POST['endereco'];
 $cidade = $_POST['cidade'];
 $curso = $_POST['codcurso'];
+
 //criando linha de insert
 $sqlinsert = "insert into aluno(matricula, nome, endereco, cidade, codcurso)
 VALUES ('$matricula', '$nome', '$endereco', '$cidade', '$curso')";
