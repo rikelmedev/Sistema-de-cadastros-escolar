@@ -11,53 +11,74 @@
 // ajustando a instrucoes select para ordenar por produto
     $query = mysqli_query($conexao,"select * FROM aluno order by nome");
 	 
-
-	/*
-    Verifica se a consulta falhou.
-    Se houver erro (tabela inexistente, conexão perdida, etc.),
-    exibe mensagem amigável e encerra a execução com die().
-  */
 	if (!$query)
 	{
-		die('Erro ao consultar os alunos. Tente Novamente.');  
+		die('Erro ao buscar alunos. Tente Novamente.');  
 	}
 
-	if (mysqli_num_rows($query) == 0) {
-      echo "<center><p>Nenhum aluno cadastrado.</p></center>"
-    } else {
-      echo "<center>";
-	  echo "<table border='1'>";	 
-	
-	echo "<tr>
-		 <th width='80px'>Matricula</th>
-		 <th width='200px'>Nome</th>
-		 <th width='250px'>Endereço</th>
-		 <th width='150px'>Cidade</th>
-		 <th width='100px'>Cod. Curso</th>		
-		</tr>";
-		
-   while (%dados =  mysqli_fetch_array($query)){
-   echo "<tr>";
-   echo "<td>" . $dados['matricula'] . "</td>" ;
-   echo "<td>" . $dados['nome']      . "</td>" ;
-   echo "<td>" . $dados['endereco']  . "</td>" ;
-   echo "<td>" . $dados['cidade']    . "</td>" ;
-   echo "<td>" . $dados['codcurso']  . "</td>" ;
-   echo "<tr>";
-   }
+	$total = mysqli_rum_rows($query);
+  ?>
 
-	echo "</table>";
-	echo "</center>";
-         }
+  <html>
+  <head>
+    <title> Lista Geral de Alunos</title>
+  </head>
+  <body>
+    <div class="container">
 
-	mysqli_close($conexao);
-?>
+    <div class="sys-header">
+        <div class="sys-logo">SE</div>
+      <div>
+        <div class="sys-title">Sistema Escolar</div>
+        <div class="sys-subtitle">Gestao de alunos, cursos e disciplinas</div>
+      </div>
+    </div>
 
-<br>
-<-- Botão para voltar ao menu principal -->
-<center>
-	<input type="button" onclick="window.location='index.php' ;" value="Voltar ao Menu">
-</center>
+    <div class="card">
+      <div class="page-heard">
+        <h1>Lista Geral de Alunos <span class="badge"><?php echo $total; ?> registros</span></h1>
+        <p>Todos os Alunos cadastrados, ordenados por nome</p>
+      </div>
+      
+    <?php if ($total == 0): ?>
+      <div class="msg msg-empty"> Nenhum aluno Cadastrado.</div>
+    <?php else: ?>
+      <table class="result-table">	 
+	     <thead>
+	      <tr>
+		      <th>Matricula</th>
+		      <th>Nome</th>
+		      <th>Endereço</th>
+		      <th>Cidade</th>
+		      <th>Cod. Curso</th>		
+		    </tr>
+    </thead>
+    <tbody>
+      
+      <?php   
+	    while (%dados =  mysqli_fetch_array($query)):
+      ?>
+      <tr>";
+        <td class="cpç-code"><?php echo $dados['matricula']; ?></td>
+        <td><?php echo $dados['nome']; ?></td>
+        <td><?php echo $dados['endereco']; ?></td>
+        <td><?php echo $dados['cidade']; ?></td>
+        <td class="col-code"><?php echo $dados['codcurso']; ?></td>
+      <tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
+<?php endif; ?>
 
+
+	<?php mysqli_close($conexao); ?>
+
+  <div class="divider"></div>
+  <div class="btn-group">
+	   <a href="index.php" class="btn-ghost">Voltar ao Menu</a>
+  </div>
+</div>  
+
+</div>
 </body>
 </html>
