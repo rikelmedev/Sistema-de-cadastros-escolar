@@ -19,21 +19,17 @@ $sqlinsert = "insert into disciplina(coddisciplina, nome_disciplina)
 //EXECUÇÃO DO COMANDO E VERIFICAÇÃO DO RESULTADO
 $resultado = mysqli_query($conexao, $sqlinsert);
 
-if (!$resultado){
-
-if(mysqli_error($conexao) == 1062){
-    echo "<p>Codigo <strong>$codigo</strong> já esta cadastrado.
-         Use um codigo de disciplina diferente.</p>";
+if (!$resultado) {
+  if (mysqli_errno($conexao) == 1062) {
+    echo "<p>Código $codigo já cadastrado. Use outro.</p>";
   } else {
-    echo "<p>Erro ao realizar o cadastro. Tente novamente.</p>";
+    echo "<p>Erro ao cadastrar. Tente novamente.</p>";
   }
-
- } else {
- echo "<p>Disciplina <strong>$nomedisciplina</strong> cadastrada com sucesso!</p>".   
- }
-
+} else {
+  echo "<p>Disciplina $nomedisciplina cadastrada com sucesso!</p>";
+}
+ 
 mysqli_close($conexao);
-
 ?>
 
 <br>
