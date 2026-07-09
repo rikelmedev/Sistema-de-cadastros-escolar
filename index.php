@@ -11,7 +11,7 @@
 
   <div class="container">
 
-  //-- Cabeçalho com logo e nome do sistema --
+    <!-- Cabeçalho com logo e nome do sistema -->
     <div class="sys-header">
       <div class="sys-logo">SE</div>
       <div>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    //-- SEÇÃO: Cadastros --
+    <!-- SEÇÃO: Cadastros -->
     <div class="card">
       <div class="card-title">Cadastros</div>
       <div class="menu-grid">
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    //-- SEÇÃO: Pesquisar --
+    <!-- SEÇÃO: Pesquisar -->
     <div class="card">
       <div class="card-title">Pesquisar</div>
       <div class="menu-grid">
