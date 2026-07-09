@@ -1,42 +1,67 @@
-﻿<html>
-<head>
-     <title>Cadastro de Alunos</title>
-</head>
-<body>
+﻿<?php
+include_once('conexao.php');
 
-
-<?php
-include_once ('conexao.php');
-
-//recuperando
+//RECUPERAÇÃO DOS DADOS DO FORMULÁRIO
 $matricula = $_POST['matricula'];
 $nome      = $_POST['nome'];
 $endereco  = $_POST['endereco'];
 $cidade    = $_POST['cidade'];
 $curso     = $_POST['codcurso'];
 
-//criando linha de insert
-    $sqlinsert = "insert into aluno(matricula, nome, endereco, cidade, codcurso)
-       VALUES ('$matricula', '$nome', '$endereco', '$cidade', '$curso')";
+//CRIANDO LINHA DO INSERT
+$sqlinsert = "INSERT INTO aluno (matricula, nome, endereco, cidade, codcurso)
+              VALUES ('$matricula', '$nome', '$endereco', '$cidade', '$curso')";
 
-//executando instrução SQL
-$resultado = mysqli_query($conexao, $sql);
+//EXECUÇÃO E VERIFICAÇÃO DO RESULTADO
+$resultado = mysqli_query($conexao, $sqlinsert);
 
-  if (!$resultado) {
+if (!$resultado) {
   if (mysqli_errno($conexao) == 1062) {
-    echo "<p>Matrícula $matricula já cadastrada. Use outra.</p>";
+    $msg_tipo  = "msg-error";
+    $msg_texto = "Matrícula <strong>$matricula</strong> já cadastrada. Use outra.";
   } else {
-    echo "<p>Erro ao cadastrar. Tente novamente.</p>";
+    $msg_tipo  = "msg-error";
+    $msg_texto = "Erro ao cadastrar. Tente novamente.";
   }
 } else {
-  echo "<p>Aluno $nome cadastrado com sucesso!</p>";
+  $msg_tipo  = "msg-success";
+  $msg_texto = "Aluno <strong>$nome</strong> cadastrado com sucesso!";
 }
 
 mysqli_close($conexao);
 ?>
- 
-<br>
-<input type="button" onclick="window.location='index.php';" value="Voltar ao Menu">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Alunos — Sistema Escolar</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="container">
 
+  <div class="sys-header">
+    <div class="sys-logo">SE</div>
+    <div>
+      <div class="sys-title">Sistema Escolar</div>
+      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="page-header">
+      <h1>Cadastro de Alunos</h1>
+    </div>
+    <div class="msg <?php echo $msg_tipo; ?>">
+      <?php echo $msg_texto; ?>
+    </div>
+    <div class="divider"></div>
+    <div class="btn-group">
+      <a href="cadalunos.html" class="btn btn-primary">Cadastrar Outro</a>
+      <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>
