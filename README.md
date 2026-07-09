@@ -16,6 +16,18 @@ Permite cadastrar e consultar alunos, cursos e disciplinas através de uma inter
 
 ---
 
+## 📸 Screenshots
+
+| Menu principal | Cadastro de alunos |
+|---|---|
+| ![Menu principal](screenshots/menu-principal.png) | ![Cadastro de alunos](screenshots/cadastro-aluno.png) |
+
+| Lista geral de alunos | Lista geral de cursos |
+|---|---|
+| ![Lista de alunos](screenshots/lista-alunos.png) | ![Lista de cursos](screenshots/lista-cursos.png) |
+
+---
+
 ## 🛠️ Tecnologias utilizadas
 
 | Tecnologia | Uso |
