@@ -51,11 +51,11 @@ $total = mysqli_num_rows($query);
         <tbody>
           <?php while ($dados = mysqli_fetch_array($query)): ?>
           <tr>
-            <td class="col-code"><?php echo $dados['codcurso']; ?></td>
-            <td><?php echo $dados['nome']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina01']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina02']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina03']; ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
+            <td><?php echo htmlspecialchars($dados['nome']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina01']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina02']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina03']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>

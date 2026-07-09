@@ -48,8 +48,8 @@ $total = mysqli_num_rows($query);
         <tbody>
           <?php while ($dados = mysqli_fetch_array($query)): ?>
           <tr>
-            <td class="col-code"><?php echo $dados['coddisciplina']; ?></td>
-            <td><?php echo $dados['nome_disciplina']; ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina']); ?></td>
+            <td><?php echo htmlspecialchars($dados['nome_disciplina']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>

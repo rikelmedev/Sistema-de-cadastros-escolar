@@ -4,10 +4,13 @@ include_once('conexao.php');
 //RECUPERAÇÃO DO TERMO DE BUSCA
 $busca = $_POST['inicial'];
 
-//EXECUÇÃO DA CONSULTA SQL
-$query = mysqli_query($conexao,
-  "SELECT * FROM curso WHERE nome LIKE '%$busca%' ORDER BY nome"
+//EXECUÇÃO DA CONSULTA SQL (PREPARED STATEMENT)
+$stmt = mysqli_prepare($conexao,
+  "SELECT * FROM curso WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome"
 );
+mysqli_stmt_bind_param($stmt, "s", $busca);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
 if (!$query) {
   die('Erro ao realizar a pesquisa. Tente novamente.');
@@ -37,12 +40,12 @@ $total = mysqli_num_rows($query);
   <div class="card">
     <div class="page-header">
       <h1>Pesquisa de Cursos <span class="badge"><?php echo $total; ?> resultado(s)</span></h1>
-      <p>Resultado para: <strong><?php echo $busca; ?></strong></p>
+      <p>Resultado para: <strong><?php echo htmlspecialchars($busca); ?></strong></p>
     </div>
 
     <?php if ($total == 0): ?>
       <div class="msg msg-empty">
-        Nenhum curso encontrado com o nome <strong><?php echo $busca; ?></strong>.
+        Nenhum curso encontrado com o nome <strong><?php echo htmlspecialchars($busca); ?></strong>.
       </div>
     <?php else: ?>
       <table class="result-table">
@@ -58,18 +61,21 @@ $total = mysqli_num_rows($query);
         <tbody>
           <?php while ($dados = mysqli_fetch_array($query)): ?>
           <tr>
-            <td class="col-code"><?php echo $dados['codcurso']; ?></td>
-            <td><?php echo $dados['nome']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina01']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina02']; ?></td>
-            <td class="col-code"><?php echo $dados['coddisciplina03']; ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
+            <td><?php echo htmlspecialchars($dados['nome']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina01']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina02']); ?></td>
+            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina03']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>
       </table>
     <?php endif; ?>
 
-    <?php mysqli_close($conexao); ?>
+    <?php
+    mysqli_stmt_close($stmt);
+    mysqli_close($conexao);
+    ?>
 
     <div class="divider"></div>
     <div class="btn-group">

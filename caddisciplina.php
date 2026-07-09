@@ -5,25 +5,29 @@ include_once('conexao.php');
 $codigo         = $_POST['coddisciplina'];
 $nomedisciplina = $_POST['nomedisciplina'];
 
-//CRIANDO LINHA DO INSERT
-$sqlinsert = "INSERT INTO disciplina (coddisciplina, nome_disciplina)
-              VALUES ('$codigo', '$nomedisciplina')";
+//CRIANDO LINHA DO INSERT (PREPARED STATEMENT)
+$stmt = mysqli_prepare($conexao,
+  "INSERT INTO disciplina (coddisciplina, nome_disciplina) VALUES (?, ?)"
+);
+mysqli_stmt_bind_param($stmt, "ss", $codigo, $nomedisciplina);
 
 //EXECUÇÃO E VERIFICAÇÃO DO RESULTADO
-$resultado = mysqli_query($conexao, $sqlinsert);
+$resultado = mysqli_stmt_execute($stmt);
 
 if (!$resultado) {
-  if (mysqli_errno($conexao) == 1062) {
+  if (mysqli_stmt_errno($stmt) == 1062) {
     $msg_tipo  = "msg-error";
-    $msg_texto = "Código <strong>$codigo</strong> já cadastrado. Use outro.";
+    $msg_texto = "Código <strong>" . htmlspecialchars($codigo) . "</strong> já cadastrado. Use outro.";
   } else {
     $msg_tipo  = "msg-error";
     $msg_texto = "Erro ao cadastrar. Tente novamente.";
   }
 } else {
   $msg_tipo  = "msg-success";
-  $msg_texto = "Disciplina <strong>$nomedisciplina</strong> cadastrada com sucesso!";
+  $msg_texto = "Disciplina <strong>" . htmlspecialchars($nomedisciplina) . "</strong> cadastrada com sucesso!";
 }
+
+mysqli_stmt_close($stmt);
 
 mysqli_close($conexao);
 ?>

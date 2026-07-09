@@ -8,25 +8,29 @@ $cod1      = $_POST['coddisciplina1'];
 $cod2      = $_POST['coddisciplina2'];
 $cod3      = $_POST['coddisciplina3'];
 
-//CRIANDO LINHA DO INSERT
-$sqlinsert = "INSERT INTO curso (codcurso, nome, coddisciplina01, coddisciplina02, coddisciplina03)
-              VALUES ('$codigo', '$nomecurso', '$cod1', '$cod2', '$cod3')";
+//CRIANDO LINHA DO INSERT (PREPARED STATEMENT)
+$stmt = mysqli_prepare($conexao,
+  "INSERT INTO curso (codcurso, nome, coddisciplina01, coddisciplina02, coddisciplina03) VALUES (?, ?, ?, ?, ?)"
+);
+mysqli_stmt_bind_param($stmt, "sssss", $codigo, $nomecurso, $cod1, $cod2, $cod3);
 
 //EXECUÇÃO E VERIFICAÇÃO DO RESULTADO
-$resultado = mysqli_query($conexao, $sqlinsert);
+$resultado = mysqli_stmt_execute($stmt);
 
 if (!$resultado) {
-  if (mysqli_errno($conexao) == 1062) {
+  if (mysqli_stmt_errno($stmt) == 1062) {
     $msg_tipo  = "msg-error";
-    $msg_texto = "Código <strong>$codigo</strong> já cadastrado. Use outro.";
+    $msg_texto = "Código <strong>" . htmlspecialchars($codigo) . "</strong> já cadastrado. Use outro.";
   } else {
     $msg_tipo  = "msg-error";
     $msg_texto = "Erro ao cadastrar. Tente novamente.";
   }
 } else {
   $msg_tipo  = "msg-success";
-  $msg_texto = "Curso <strong>$nomecurso</strong> cadastrado com sucesso!";
+  $msg_texto = "Curso <strong>" . htmlspecialchars($nomecurso) . "</strong> cadastrado com sucesso!";
 }
+
+mysqli_stmt_close($stmt);
 
 mysqli_close($conexao);
 ?>
