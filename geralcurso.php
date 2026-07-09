@@ -1,33 +1,26 @@
-<html>
-     <title> Lista Geral de Cursos </title>
-<body>
-
-<center>
- <h3>Lista Geral de Cursos</h3>
-</center>
-
-
 <?php
-	include_once('conexao.php');
+include_once('conexao.php');
 
+//EXECUÇÃO DA CONSULTA SQL
+$query = mysqli_query($conexao, "SELECT * FROM curso ORDER BY nome");
 
-$query = mysqli_query($conexao,"select * from curso order by nome");
-	
-    if (!$query) {
-  die("Erro ao buscar cursos.");
+if (!$query) {
+  die('Erro ao buscar cursos. Tente novamente.');
 }
- 
+
+//VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
 $total = mysqli_num_rows($query);
 ?>
- 
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <title>Lista Geral de Cursos</title>
+  <meta charset="UTF-8">
+  <title>Lista Geral de Cursos — Sistema Escolar</title>
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 <div class="container">
- 
+
   <div class="sys-header">
     <div class="sys-logo">SE</div>
     <div>
@@ -35,13 +28,13 @@ $total = mysqli_num_rows($query);
       <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
     </div>
   </div>
- 
+
   <div class="card">
     <div class="page-header">
       <h1>Lista Geral de Cursos <span class="badge"><?php echo $total; ?> registros</span></h1>
       <p>Todos os cursos cadastrados, ordenados por nome.</p>
     </div>
- 
+
     <?php if ($total == 0): ?>
       <div class="msg msg-empty">Nenhum curso cadastrado.</div>
     <?php else: ?>
@@ -68,15 +61,15 @@ $total = mysqli_num_rows($query);
         </tbody>
       </table>
     <?php endif; ?>
- 
+
     <?php mysqli_close($conexao); ?>
- 
+
     <div class="divider"></div>
     <div class="btn-group">
       <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
     </div>
   </div>
- 
+
 </div>
 </body>
 </html>

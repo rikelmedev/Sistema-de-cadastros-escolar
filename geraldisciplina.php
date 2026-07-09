@@ -1,43 +1,26 @@
-﻿<html>
-<head>
-     <title> Listagem Geral de Disciplina </title>
-     <link rel="stylesheet" href="estilo.css">
-</heade>
-<body>
-
-<div class="container">
- 
-  <div class="sys-header">
-    <div class="sys-logo">SE</div>
-    <div>
-      <div class="sys-title">Sistema Escolar</div>
-      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-    </div>
-  </div>
- 
-  <div class="card">
-
-<?php
+﻿<?php
 include_once('conexao.php');
 
-// AJUSTANDO A INSTRUÇÃO DE CONSULTA SQL
-$query = mysqli_query($conexao,"select * from disciplina order by nome_disciplina");
-	
+//EXECUÇÃO DA CONSULTA SQL
+$query = mysqli_query($conexao, "SELECT * FROM disciplina ORDER BY nome_disciplina");
+
 if (!$query) {
-  die("Erro ao buscar disciplinas.");
+  die('Erro ao buscar disciplinas. Tente novamente.');
 }
- 
+
+//VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
 $total = mysqli_num_rows($query);
 ?>
- 
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <title>Lista Geral de Disciplinas</title>
+  <meta charset="UTF-8">
+  <title>Lista Geral de Disciplinas — Sistema Escolar</title>
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 <div class="container">
- 
+
   <div class="sys-header">
     <div class="sys-logo">SE</div>
     <div>
@@ -45,13 +28,13 @@ $total = mysqli_num_rows($query);
       <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
     </div>
   </div>
- 
+
   <div class="card">
     <div class="page-header">
       <h1>Lista Geral de Disciplinas <span class="badge"><?php echo $total; ?> registros</span></h1>
       <p>Todas as disciplinas cadastradas, ordenadas por nome.</p>
     </div>
- 
+
     <?php if ($total == 0): ?>
       <div class="msg msg-empty">Nenhuma disciplina cadastrada.</div>
     <?php else: ?>
@@ -72,16 +55,15 @@ $total = mysqli_num_rows($query);
         </tbody>
       </table>
     <?php endif; ?>
- 
+
     <?php mysqli_close($conexao); ?>
- 
+
     <div class="divider"></div>
     <div class="btn-group">
       <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
     </div>
   </div>
- 
+
 </div>
 </body>
 </html>
- 
