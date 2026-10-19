@@ -76,7 +76,7 @@ disciplina
 
 **1. Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/sistema-escolar.git
+git clone https://github.com/rikelmedev/Projetos-SQL.git sistema-escolar
 ```
 
 **2. Copie a pasta para o servidor local**
