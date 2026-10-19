@@ -1,4 +1,10 @@
 <?php
+//SE A PAGINA FOR ABERTA SEM ENVIAR O FORMULARIO, VOLTA PARA O FORMULARIO
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Location: consulta_aluno.html');
+  exit;
+}
+
 include_once('conexao.php');
 
 //RECUPERAÇÃO DO TERMO DE BUSCA

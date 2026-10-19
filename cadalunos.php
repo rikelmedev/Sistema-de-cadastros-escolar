@@ -1,4 +1,10 @@
-﻿<?php
+<?php
+//SE A PAGINA FOR ABERTA SEM ENVIAR O FORMULARIO, VOLTA PARA O FORMULARIO
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Location: cadalunos.html');
+  exit;
+}
+
 include_once('conexao.php');
 
 //RECUPERAÇÃO DOS DADOS DO FORMULÁRIO
