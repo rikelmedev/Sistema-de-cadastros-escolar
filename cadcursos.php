@@ -27,6 +27,10 @@ if (!$resultado) {
   if (mysqli_stmt_errno($stmt) == 1062) {
     $msg_tipo  = "msg-error";
     $msg_texto = "Código <strong>" . htmlspecialchars($codigo) . "</strong> já cadastrado. Use outro.";
+  } elseif (mysqli_stmt_errno($stmt) == 1452) {
+    //1452 = ALGUM CODIGO DE DISCIPLINA NAO EXISTE NA TABELA DISCIPLINA
+    $msg_tipo  = "msg-error";
+    $msg_texto = "Uma ou mais disciplinas informadas não existem. Confira os códigos na lista de disciplinas.";
   } else {
     $msg_tipo  = "msg-error";
     $msg_texto = "Erro ao cadastrar. Tente novamente.";

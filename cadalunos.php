@@ -27,6 +27,10 @@ if (!$resultado) {
   if (mysqli_stmt_errno($stmt) == 1062) {
     $msg_tipo  = "msg-error";
     $msg_texto = "Matrícula <strong>" . htmlspecialchars($matricula) . "</strong> já cadastrada. Use outra.";
+  } elseif (mysqli_stmt_errno($stmt) == 1452) {
+    //1452 = CODIGO DO CURSO NAO EXISTE NA TABELA CURSO
+    $msg_tipo  = "msg-error";
+    $msg_texto = "Curso <strong>" . htmlspecialchars($curso) . "</strong> não existe. Confira o código na lista de cursos.";
   } else {
     $msg_tipo  = "msg-error";
     $msg_texto = "Erro ao cadastrar. Tente novamente.";
