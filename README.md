@@ -94,7 +94,14 @@ C:/wamp64/www/sistema-escolar/
 - Selecione o arquivo `bd/escola.sql`
 - Clique em **Executar**
 
-**4. Acesse no navegador**
+**4. Configure a conexão com o banco**
+- Copie o arquivo `config.example.php` e renomeie a cópia para `config.php`
+- Se o seu MySQL usa outro usuário ou senha, edite os dados no `config.php`
+- No XAMPP/WAMP padrão (usuário `root`, sem senha) não precisa mudar nada
+
+> O `config.php` está no `.gitignore`, então as credenciais nunca vão para o GitHub.
+
+**5. Acesse no navegador**
 ```
 http://localhost/sistema-escolar/
 ```
@@ -111,6 +118,7 @@ sistema-escolar/
 │
 ├── estilo.css                  # CSS central — identidade visual do sistema
 ├── conexao.php                 # Conexão com o banco MySQL
+├── config.example.php          # Modelo das credenciais (copiar para config.php)
 ├── index.php                   # Menu principal
 │
 ├── cadalunos.html              # Formulário de cadastro de alunos
