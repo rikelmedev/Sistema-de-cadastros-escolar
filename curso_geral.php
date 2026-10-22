@@ -11,8 +11,18 @@ include_once('conexao.php');
 $busca = $_POST['inicial'];
 
 //EXECUÇÃO DA CONSULTA SQL (PREPARED STATEMENT)
+//A TABELA DISCIPLINA ENTRA 3 VEZES (d1, d2, d3), UMA PARA CADA COLUNA DE DISCIPLINA DO CURSO
 $stmt = mysqli_prepare($conexao,
-  "SELECT * FROM curso WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome"
+  "SELECT c.codcurso, c.nome,
+          d1.nome_disciplina AS disciplina1,
+          d2.nome_disciplina AS disciplina2,
+          d3.nome_disciplina AS disciplina3
+   FROM curso c
+   LEFT JOIN disciplina d1 ON d1.coddisciplina = c.coddisciplina01
+   LEFT JOIN disciplina d2 ON d2.coddisciplina = c.coddisciplina02
+   LEFT JOIN disciplina d3 ON d3.coddisciplina = c.coddisciplina03
+   WHERE c.nome LIKE CONCAT('%', ?, '%')
+   ORDER BY c.nome"
 );
 mysqli_stmt_bind_param($stmt, "s", $busca);
 mysqli_stmt_execute($stmt);
@@ -69,9 +79,9 @@ $total = mysqli_num_rows($query);
           <tr>
             <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
             <td><?php echo htmlspecialchars($dados['nome']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina01']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina02']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina03']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina1']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina2']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina3']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>

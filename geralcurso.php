@@ -2,7 +2,18 @@
 include_once('conexao.php');
 
 //EXECUÇÃO DA CONSULTA SQL
-$query = mysqli_query($conexao, "SELECT * FROM curso ORDER BY nome");
+//A TABELA DISCIPLINA ENTRA 3 VEZES (d1, d2, d3), UMA PARA CADA COLUNA DE DISCIPLINA DO CURSO
+$query = mysqli_query($conexao,
+  "SELECT c.codcurso, c.nome,
+          d1.nome_disciplina AS disciplina1,
+          d2.nome_disciplina AS disciplina2,
+          d3.nome_disciplina AS disciplina3
+   FROM curso c
+   LEFT JOIN disciplina d1 ON d1.coddisciplina = c.coddisciplina01
+   LEFT JOIN disciplina d2 ON d2.coddisciplina = c.coddisciplina02
+   LEFT JOIN disciplina d3 ON d3.coddisciplina = c.coddisciplina03
+   ORDER BY c.nome"
+);
 
 if (!$query) {
   die('Erro ao buscar cursos. Tente novamente.');
@@ -53,9 +64,9 @@ $total = mysqli_num_rows($query);
           <tr>
             <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
             <td><?php echo htmlspecialchars($dados['nome']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina01']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina02']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['coddisciplina03']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina1']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina2']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplina3']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>

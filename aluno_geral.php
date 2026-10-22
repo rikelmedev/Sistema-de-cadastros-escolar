@@ -10,9 +10,13 @@ include_once('conexao.php');
 //RECUPERAÇÃO DO TERMO DE BUSCA
 $busca = $_POST['inicial'];
 
-//EXECUÇÃO DA CONSULTA SQL (PREPARED STATEMENT)
+//EXECUÇÃO DA CONSULTA SQL (PREPARED STATEMENT + JOIN PARA O NOME DO CURSO)
 $stmt = mysqli_prepare($conexao,
-  "SELECT * FROM aluno WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome"
+  "SELECT a.matricula, a.nome, a.endereco, a.cidade, c.nome AS nome_curso
+   FROM aluno a
+   LEFT JOIN curso c ON c.codcurso = a.codcurso
+   WHERE a.nome LIKE CONCAT('%', ?, '%')
+   ORDER BY a.nome"
 );
 mysqli_stmt_bind_param($stmt, "s", $busca);
 mysqli_stmt_execute($stmt);
@@ -61,7 +65,7 @@ $total = mysqli_num_rows($query);
             <th>Matrícula</th>
             <th>Endereço</th>
             <th>Cidade</th>
-            <th>Cód. Curso</th>
+            <th>Curso</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +75,7 @@ $total = mysqli_num_rows($query);
             <td class="col-code"><?php echo htmlspecialchars($dados['matricula']); ?></td>
             <td><?php echo htmlspecialchars($dados['endereco']); ?></td>
             <td><?php echo htmlspecialchars($dados['cidade']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
+            <td><?php echo htmlspecialchars($dados['nome_curso']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>

@@ -1,8 +1,13 @@
 <?php
 include_once('conexao.php');
 
-//EXECUÇÃO DA CONSULTA SQL
-$query = mysqli_query($conexao, "SELECT * FROM aluno ORDER BY nome");
+//EXECUÇÃO DA CONSULTA SQL (JOIN BUSCA O NOME DO CURSO PELO CODIGO)
+$query = mysqli_query($conexao,
+  "SELECT a.matricula, a.nome, a.endereco, a.cidade, c.nome AS nome_curso
+   FROM aluno a
+   LEFT JOIN curso c ON c.codcurso = a.codcurso
+   ORDER BY a.nome"
+);
 
 if (!$query) {
   die('Erro ao buscar alunos. Tente novamente.');
@@ -45,7 +50,7 @@ $total = mysqli_num_rows($query);
             <th>Nome</th>
             <th>Endereço</th>
             <th>Cidade</th>
-            <th>Cód. Curso</th>
+            <th>Curso</th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +60,7 @@ $total = mysqli_num_rows($query);
             <td><?php echo htmlspecialchars($dados['nome']); ?></td>
             <td><?php echo htmlspecialchars($dados['endereco']); ?></td>
             <td><?php echo htmlspecialchars($dados['cidade']); ?></td>
-            <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
+            <td><?php echo htmlspecialchars($dados['nome_curso']); ?></td>
           </tr>
           <?php endwhile; ?>
         </tbody>
