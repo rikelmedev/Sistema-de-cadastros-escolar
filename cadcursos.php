@@ -1,7 +1,7 @@
 <?php
 //SE A PAGINA FOR ABERTA SEM ENVIAR O FORMULARIO, VOLTA PARA O FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header('Location: cadcurso.html');
+  header('Location: form_curso.php');
   exit;
 }
 
@@ -71,7 +71,7 @@ mysqli_close($conexao);
     </div>
     <div class="divider"></div>
     <div class="btn-group">
-      <a href="cadcurso.html" class="btn btn-primary">Cadastrar Outro</a>
+      <a href="form_curso.php" class="btn btn-primary">Cadastrar Outro</a>
       <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
     </div>
   </div>

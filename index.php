@@ -25,7 +25,7 @@
       <div class="card-title">Cadastros</div>
       <div class="menu-grid">
 
-        <a href="cadalunos.html" class="menu-link">
+        <a href="form_aluno.php" class="menu-link">
           <span class="icon">👤</span>
           <div>
             <div>Alunos</div>
@@ -33,7 +33,7 @@
           </div>
         </a>
 
-        <a href="cadcurso.html" class="menu-link">
+        <a href="form_curso.php" class="menu-link">
           <span class="icon">🎓</span>
           <div>
             <div>Cursos</div>

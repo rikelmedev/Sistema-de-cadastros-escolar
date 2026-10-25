@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿<?php
+include_once('conexao.php');
+
+//BUSCA OS CURSOS PARA PREENCHER A LISTA DE SELECAO
+$cursos = mysqli_query($conexao, "SELECT codcurso, nome FROM curso ORDER BY nome");
+?>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -22,7 +28,7 @@
 
       <form action="cadalunos.php" method="POST">
 
-        <!-- Linha com matrícula e código do curso lado a lado -->
+        <!-- Linha com matrícula e curso lado a lado -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Matrícula</label>
@@ -31,9 +37,17 @@
                    placeholder="Ex: 2025001" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Cód. Curso</label>
-            <input class="form-input" type="text" name="codcurso"
-                   placeholder="Ex: 101" required>
+            <label class="form-label">Curso</label>
+            <!-- Lista preenchida com os cursos do banco; envia o codigo do curso escolhido -->
+            <select class="form-input" name="codcurso" required>
+              <option value="">Selecione o curso</option>
+              <?php while ($curso = mysqli_fetch_assoc($cursos)): ?>
+              <option value="<?php echo htmlspecialchars($curso['codcurso']); ?>">
+                <?php echo htmlspecialchars($curso['codcurso'] . ' — ' . $curso['nome']); ?>
+              </option>
+              <?php endwhile; ?>
+            </select>
+            <?php mysqli_close($conexao); ?>
           </div>
         </div>
 

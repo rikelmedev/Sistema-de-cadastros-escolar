@@ -121,10 +121,10 @@ sistema-escolar/
 ├── config.example.php          # Modelo das credenciais (copiar para config.php)
 ├── index.php                   # Menu principal
 │
-├── cadalunos.html              # Formulário de cadastro de alunos
+├── form_aluno.php              # Formulário de cadastro de alunos (lista de cursos vem do banco)
 ├── cadalunos.php               # Processa o cadastro de alunos
 │
-├── cadcurso.html               # Formulário de cadastro de cursos
+├── form_curso.php              # Formulário de cadastro de cursos (lista de disciplinas vem do banco)
 ├── cadcursos.php               # Processa o cadastro de cursos
 │
 ├── caddisciplina.html          # Formulário de cadastro de disciplinas

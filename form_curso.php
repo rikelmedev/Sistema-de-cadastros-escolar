@@ -1,4 +1,22 @@
-﻿<!DOCTYPE html>
+﻿<?php
+include_once('conexao.php');
+
+//BUSCA AS DISCIPLINAS UMA VEZ SO E GUARDA NUM ARRAY (USADO NAS 3 LISTAS)
+$resultado   = mysqli_query($conexao, "SELECT coddisciplina, nome_disciplina FROM disciplina ORDER BY nome_disciplina");
+$disciplinas = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+mysqli_close($conexao);
+
+//MONTA AS OPCOES DE UMA LISTA DE DISCIPLINAS
+function opcoes_disciplinas($disciplinas) {
+  echo '<option value="">Selecione</option>';
+  foreach ($disciplinas as $d) {
+    echo '<option value="' . htmlspecialchars($d['coddisciplina']) . '">'
+       . htmlspecialchars($d['coddisciplina'] . ' — ' . $d['nome_disciplina'])
+       . '</option>';
+  }
+}
+?>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -41,20 +59,25 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Disciplina 1</label>
-            <input class="form-input" type="text" name="coddisciplina1"
-                   placeholder="Código" required>
+            <select class="form-input" name="coddisciplina1" required>
+              <?php opcoes_disciplinas($disciplinas); ?>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label">Disciplina 2</label>
-            <input class="form-input" type="text" name="coddisciplina2"
-                   placeholder="Código" required>
+            <select class="form-input" name="coddisciplina2" required>
+              <?php opcoes_disciplinas($disciplinas); ?>
+            </select>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Disciplina 3</label>
-          <input class="form-input" type="text" name="coddisciplina3"
-                 placeholder="Código" style="max-width: 200px;" required>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Disciplina 3</label>
+            <select class="form-input" name="coddisciplina3" required>
+              <?php opcoes_disciplinas($disciplinas); ?>
+            </select>
+          </div>
         </div>
 
         <div class="divider"></div>
