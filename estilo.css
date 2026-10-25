@@ -265,6 +265,39 @@ select.form-input option {
   margin-top: 24px;
 }
 
+/* Botões pequenos da coluna "Ações" das tabelas */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: rgba(239,68,68,0.1);
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.3);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.acoes {
+  display: flex;
+  gap: 6px;
+}
+
+/* Formulário do botão Excluir fica na mesma linha do Editar */
+.acoes form {
+  margin: 0;
+}
+
+/* Campo que não pode ser alterado na edição (chave do registro) */
+.form-input[readonly] {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
 /* ── Tabelas de resultado ───────────────────────────────────*/
 .result-table {
   width: 100%;

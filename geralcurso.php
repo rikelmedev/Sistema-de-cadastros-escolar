@@ -57,6 +57,7 @@ $total = mysqli_num_rows($query);
             <th>Disciplina 01</th>
             <th>Disciplina 02</th>
             <th>Disciplina 03</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +68,18 @@ $total = mysqli_num_rows($query);
             <td><?php echo htmlspecialchars($dados['disciplina1']); ?></td>
             <td><?php echo htmlspecialchars($dados['disciplina2']); ?></td>
             <td><?php echo htmlspecialchars($dados['disciplina3']); ?></td>
+            <td>
+              <!-- Editar abre o formulario preenchido; Excluir pede confirmacao antes de enviar -->
+              <div class="acoes">
+                <a href="editar_curso.php?codcurso=<?php echo urlencode($dados['codcurso']); ?>"
+                   class="btn btn-ghost btn-sm">Editar</a>
+                <form action="excluir_curso.php" method="POST"
+                      onsubmit="return confirm('Excluir o curso <?php echo htmlspecialchars(addslashes($dados['nome'])); ?>?');">
+                  <input type="hidden" name="codcurso" value="<?php echo htmlspecialchars($dados['codcurso']); ?>">
+                  <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                </form>
+              </div>
+            </td>
           </tr>
           <?php endwhile; ?>
         </tbody>
