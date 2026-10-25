@@ -30,12 +30,12 @@ CREATE TABLE IF NOT EXISTS `disciplina` (
 --
 
 INSERT INTO `disciplina` (`coddisciplina`, `nome_disciplina`) VALUES
-(1, 'ltt'),
-(2, 'banco_de_dados'),
-(3, 'logica_de_programacao'),
-(4, 'etica'),
-(5, 'matematica'),
-(6, 'portugues');
+(1, 'LTT'),
+(2, 'Banco de Dados'),
+(3, 'Lógica de Programação'),
+(4, 'Ética'),
+(5, 'Matemática'),
+(6, 'Português');
 
 -- --------------------------------------------------------
 
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `curso` (
 --
 
 INSERT INTO `curso` (`codcurso`, `nome`, `coddisciplina01`, `coddisciplina02`, `coddisciplina03`) VALUES
-(101, 'informatica', 1, 2, 3),
-(102, 'mecanica', 2, 5, 4),
-(103, 'quimica', 6, 2, 1);
+(101, 'Informática', 1, 2, 3),
+(102, 'Mecânica', 2, 5, 4),
+(103, 'Química', 6, 2, 1);
 
 -- --------------------------------------------------------
 
