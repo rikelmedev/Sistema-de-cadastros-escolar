@@ -1,8 +1,19 @@
 ﻿<?php
 include_once('conexao.php');
 
+//TERMO DE BUSCA (VEM DA URL, EX: geraldisciplina.php?busca=banco). SEM BUSCA = LISTA TODAS
+$busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
+
 //EXECUÇÃO DA CONSULTA SQL
-$query = mysqli_query($conexao, "SELECT * FROM disciplina ORDER BY nome_disciplina");
+//COM A BUSCA VAZIA, O LIKE FICA '%%' E TRAZ TODAS AS DISCIPLINAS
+$stmt = mysqli_prepare($conexao,
+  "SELECT * FROM disciplina
+   WHERE nome_disciplina LIKE CONCAT('%', ?, '%')
+   ORDER BY nome_disciplina"
+);
+mysqli_stmt_bind_param($stmt, "s", $busca);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
 if (!$query) {
   die('Erro ao buscar disciplinas. Tente novamente.');
@@ -11,15 +22,34 @@ if (!$query) {
 //VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
 $total = mysqli_num_rows($query);
 ?>
-<?php $titulo = "Lista Geral de Disciplinas"; include 'cabecalho.php'; ?>
+<?php $titulo = "Disciplinas"; include 'cabecalho.php'; ?>
 
   <div class="card">
     <div class="page-header">
-      <h1>Lista Geral de Disciplinas <span class="badge"><?php echo $total; ?> registros</span></h1>
-      <p>Todas as disciplinas cadastradas, ordenadas por nome.</p>
+      <h1>Disciplinas <span class="badge"><?php echo $total; ?> registros</span></h1>
+      <?php if ($busca === ''): ?>
+        <p>Todas as disciplinas cadastradas, ordenadas por nome.</p>
+      <?php else: ?>
+        <p>Resultado para: <strong><?php echo htmlspecialchars($busca); ?></strong></p>
+      <?php endif; ?>
     </div>
 
-    <?php if ($total == 0): ?>
+    <!-- Pesquisa por nome: envia para esta mesma pagina com ?busca=... -->
+    <form class="busca" action="geraldisciplina.php" method="GET">
+      <input class="form-input" type="text" name="busca"
+             value="<?php echo htmlspecialchars($busca); ?>"
+             placeholder="Pesquisar disciplina pelo nome...">
+      <button type="submit" class="btn btn-primary">Pesquisar</button>
+      <?php if ($busca !== ''): ?>
+        <a href="geraldisciplina.php" class="btn btn-ghost">Limpar</a>
+      <?php endif; ?>
+    </form>
+
+    <?php if ($total == 0 && $busca !== ''): ?>
+      <div class="msg msg-empty">
+        Nenhuma disciplina encontrada com o nome <strong><?php echo htmlspecialchars($busca); ?></strong>.
+      </div>
+    <?php elseif ($total == 0): ?>
       <div class="msg msg-empty">Nenhuma disciplina cadastrada.</div>
     <?php else: ?>
       <table class="result-table">
@@ -53,7 +83,10 @@ $total = mysqli_num_rows($query);
       </table>
     <?php endif; ?>
 
-    <?php mysqli_close($conexao); ?>
+    <?php
+    mysqli_stmt_close($stmt);
+    mysqli_close($conexao);
+    ?>
 
     <div class="divider"></div>
     <div class="btn-group">

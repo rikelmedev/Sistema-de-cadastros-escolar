@@ -11,8 +11,7 @@ Permite cadastrar e consultar alunos, cursos e disciplinas através de uma inter
 - ✅ Cadastro de alunos, cursos e disciplinas
 - ✅ Edição e exclusão de registros (CRUD completo), com confirmação antes de excluir
 - ✅ Proteção da integridade dos dados: não exclui curso com alunos nem disciplina usada em curso
-- ✅ Listagem geral de todos os registros
-- ✅ Pesquisa por nome com filtro dinâmico (SQL LIKE)
+- ✅ Listagem de todos os registros com pesquisa por nome na mesma página (SQL LIKE)
 - ✅ Mensagens de erro amigáveis (ex: matrícula duplicada)
 - ✅ Interface responsiva com design dark mode
 
@@ -134,17 +133,9 @@ sistema-escolar/
 ├── form_disciplina.php         # Formulário de cadastro de disciplinas
 ├── caddisciplina.php           # Processa o cadastro de disciplinas
 │
-├── pesquisageral.php           # Lista todos os alunos
-├── consulta_aluno.html         # Formulário de pesquisa de alunos
-├── aluno_geral.php             # Resultado da pesquisa de alunos
-│
-├── geralcurso.php              # Lista todos os cursos
-├── consulta_curso.html         # Formulário de pesquisa de cursos
-├── curso_geral.php             # Resultado da pesquisa de cursos
-│
-├── geraldisciplina.php         # Lista todas as disciplinas
-├── consulta_disciplina.html    # Formulário de pesquisa de disciplinas
-├── nome_geral.php              # Resultado da pesquisa de disciplinas
+├── pesquisageral.php           # Lista e pesquisa alunos (com botões Editar/Excluir)
+├── geralcurso.php              # Lista e pesquisa cursos
+├── geraldisciplina.php         # Lista e pesquisa disciplinas
 │
 ├── editar_aluno.php            # Edita um aluno (aberto pelo botão Editar da lista)
 ├── editar_curso.php            # Edita um curso

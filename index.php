@@ -40,48 +40,24 @@
         <a href="pesquisageral.php" class="menu-link">
           <span class="icon">👥</span>
           <div>
-            <div>Alunos — Lista Geral</div>
-            <div class="desc">Ver todos os alunos</div>
-          </div>
-        </a>
-
-        <a href="consulta_aluno.html" class="menu-link">
-          <span class="icon">🔍</span>
-          <div>
-            <div>Alunos — Pesquisa</div>
-            <div class="desc">Buscar aluno por nome</div>
+            <div>Alunos</div>
+            <div class="desc">Listar, pesquisar, editar e excluir</div>
           </div>
         </a>
 
         <a href="geralcurso.php" class="menu-link">
           <span class="icon">📋</span>
           <div>
-            <div>Cursos — Lista Geral</div>
-            <div class="desc">Ver todos os cursos</div>
-          </div>
-        </a>
-
-        <a href="consulta_curso.html" class="menu-link">
-          <span class="icon">🔍</span>
-          <div>
-            <div>Cursos — Pesquisa</div>
-            <div class="desc">Buscar curso por nome</div>
+            <div>Cursos</div>
+            <div class="desc">Listar, pesquisar, editar e excluir</div>
           </div>
         </a>
 
         <a href="geraldisciplina.php" class="menu-link">
           <span class="icon">📖</span>
           <div>
-            <div>Disciplinas — Lista Geral</div>
-            <div class="desc">Ver todas as disciplinas</div>
-          </div>
-        </a>
-
-        <a href="consulta_disciplina.html" class="menu-link">
-          <span class="icon">🔍</span>
-          <div>
-            <div>Disciplinas — Pesquisa</div>
-            <div class="desc">Buscar disciplina por nome</div>
+            <div>Disciplinas</div>
+            <div class="desc">Listar, pesquisar, editar e excluir</div>
           </div>
         </a>
 

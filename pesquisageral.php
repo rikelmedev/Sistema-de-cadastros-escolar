@@ -1,13 +1,21 @@
 <?php
 include_once('conexao.php');
 
+//TERMO DE BUSCA (VEM DA URL, EX: pesquisageral.php?busca=ana). SEM BUSCA = LISTA TODOS
+$busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
+
 //EXECUÇÃO DA CONSULTA SQL (JOIN BUSCA O NOME DO CURSO PELO CODIGO)
-$query = mysqli_query($conexao,
+//COM A BUSCA VAZIA, O LIKE FICA '%%' E TRAZ TODOS OS ALUNOS
+$stmt = mysqli_prepare($conexao,
   "SELECT a.matricula, a.nome, a.endereco, a.cidade, c.nome AS nome_curso
    FROM aluno a
    LEFT JOIN curso c ON c.codcurso = a.codcurso
+   WHERE a.nome LIKE CONCAT('%', ?, '%')
    ORDER BY a.nome"
 );
+mysqli_stmt_bind_param($stmt, "s", $busca);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
 if (!$query) {
   die('Erro ao buscar alunos. Tente novamente.');
@@ -16,15 +24,34 @@ if (!$query) {
 //VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
 $total = mysqli_num_rows($query);
 ?>
-<?php $titulo = "Lista Geral de Alunos"; include 'cabecalho.php'; ?>
+<?php $titulo = "Alunos"; include 'cabecalho.php'; ?>
 
   <div class="card">
     <div class="page-header">
-      <h1>Lista Geral de Alunos <span class="badge"><?php echo $total; ?> registros</span></h1>
-      <p>Todos os alunos cadastrados, ordenados por nome.</p>
+      <h1>Alunos <span class="badge"><?php echo $total; ?> registros</span></h1>
+      <?php if ($busca === ''): ?>
+        <p>Todos os alunos cadastrados, ordenados por nome.</p>
+      <?php else: ?>
+        <p>Resultado para: <strong><?php echo htmlspecialchars($busca); ?></strong></p>
+      <?php endif; ?>
     </div>
 
-    <?php if ($total == 0): ?>
+    <!-- Pesquisa por nome: envia para esta mesma pagina com ?busca=... -->
+    <form class="busca" action="pesquisageral.php" method="GET">
+      <input class="form-input" type="text" name="busca"
+             value="<?php echo htmlspecialchars($busca); ?>"
+             placeholder="Pesquisar aluno pelo nome...">
+      <button type="submit" class="btn btn-primary">Pesquisar</button>
+      <?php if ($busca !== ''): ?>
+        <a href="pesquisageral.php" class="btn btn-ghost">Limpar</a>
+      <?php endif; ?>
+    </form>
+
+    <?php if ($total == 0 && $busca !== ''): ?>
+      <div class="msg msg-empty">
+        Nenhum aluno encontrado com o nome <strong><?php echo htmlspecialchars($busca); ?></strong>.
+      </div>
+    <?php elseif ($total == 0): ?>
       <div class="msg msg-empty">Nenhum aluno cadastrado.</div>
     <?php else: ?>
       <table class="result-table">
@@ -64,7 +91,10 @@ $total = mysqli_num_rows($query);
       </table>
     <?php endif; ?>
 
-    <?php mysqli_close($conexao); ?>
+    <?php
+    mysqli_stmt_close($stmt);
+    mysqli_close($conexao);
+    ?>
 
     <div class="divider"></div>
     <div class="btn-group">
