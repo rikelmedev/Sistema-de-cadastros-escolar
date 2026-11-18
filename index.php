@@ -1,24 +1,4 @@
-﻿<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Escolar</title>
-
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-
-  <div class="container">
-
-    <!-- Cabeçalho com logo e nome do sistema -->
-    <div class="sys-header">
-      <div class="sys-logo">SE</div>
-      <div>
-        <div class="sys-title">Sistema Escolar</div>
-        <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-      </div>
-    </div>
+﻿<?php $titulo = ""; include 'cabecalho.php'; ?>
 
     <!-- SEÇÃO: Cadastros -->
     <div class="card">
@@ -41,7 +21,7 @@
           </div>
         </a>
 
-        <a href="caddisciplina.html" class="menu-link">
+        <a href="form_disciplina.php" class="menu-link">
           <span class="icon">📚</span>
           <div>
             <div>Disciplinas</div>
@@ -108,7 +88,4 @@
       </div>
     </div>
 
-  </div>
-
-</body>
-</html>
+<?php include 'rodape.php'; ?>

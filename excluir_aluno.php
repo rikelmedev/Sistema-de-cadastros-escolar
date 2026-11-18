@@ -25,23 +25,7 @@ if (mysqli_stmt_affected_rows($stmt) > 0) {
 mysqli_stmt_close($stmt);
 mysqli_close($conexao);
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Excluir Aluno — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-<div class="container">
-
-  <div class="sys-header">
-    <div class="sys-logo">SE</div>
-    <div>
-      <div class="sys-title">Sistema Escolar</div>
-      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-    </div>
-  </div>
+<?php $titulo = "Excluir Aluno"; include 'cabecalho.php'; ?>
 
   <div class="card">
     <div class="page-header">
@@ -57,6 +41,4 @@ mysqli_close($conexao);
     </div>
   </div>
 
-</div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>

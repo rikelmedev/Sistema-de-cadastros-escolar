@@ -1,7 +1,7 @@
 <?php
 //SE A PAGINA FOR ABERTA SEM ENVIAR O FORMULARIO, VOLTA PARA O FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header('Location: caddisciplina.html');
+  header('Location: form_disciplina.php');
   exit;
 }
 
@@ -37,23 +37,7 @@ mysqli_stmt_close($stmt);
 
 mysqli_close($conexao);
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Cadastro de Disciplinas — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-<div class="container">
-
-  <div class="sys-header">
-    <div class="sys-logo">SE</div>
-    <div>
-      <div class="sys-title">Sistema Escolar</div>
-      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-    </div>
-  </div>
+<?php $titulo = "Cadastro de Disciplinas"; include 'cabecalho.php'; ?>
 
   <div class="card">
     <div class="page-header">
@@ -64,11 +48,9 @@ mysqli_close($conexao);
     </div>
     <div class="divider"></div>
     <div class="btn-group">
-      <a href="caddisciplina.html" class="btn btn-primary">Cadastrar Outra</a>
+      <a href="form_disciplina.php" class="btn btn-primary">Cadastrar Outra</a>
       <a href="index.php" class="btn btn-ghost">Voltar ao Menu</a>
     </div>
   </div>
 
-</div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>

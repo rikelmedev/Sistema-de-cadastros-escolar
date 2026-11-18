@@ -4,24 +4,7 @@ include_once('conexao.php');
 //BUSCA OS CURSOS PARA PREENCHER A LISTA DE SELECAO
 $cursos = mysqli_query($conexao, "SELECT codcurso, nome FROM curso ORDER BY nome");
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Alunos — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-  <div class="container">
-
-    <div class="sys-header">
-      <div class="sys-logo">SE</div>
-      <div>
-        <div class="sys-title">Sistema Escolar</div>
-        <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-      </div>
-    </div>
+<?php $titulo = "Cadastro de Alunos"; include 'cabecalho.php'; ?>
 
     <div class="card">
       <div class="card-title">Cadastro de Alunos</div>
@@ -83,6 +66,4 @@ $cursos = mysqli_query($conexao, "SELECT codcurso, nome FROM curso ORDER BY nome
       </form>
     </div>
 
-  </div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>

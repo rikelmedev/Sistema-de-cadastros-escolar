@@ -35,23 +35,7 @@ if (!$query) {
 //VERIFICAÇÃO E EXIBIÇÃO DOS RESULTADOS
 $total = mysqli_num_rows($query);
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Pesquisa de Cursos — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-<div class="container">
-
-  <div class="sys-header">
-    <div class="sys-logo">SE</div>
-    <div>
-      <div class="sys-title">Sistema Escolar</div>
-      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-    </div>
-  </div>
+<?php $titulo = "Pesquisa de Cursos"; include 'cabecalho.php'; ?>
 
   <div class="card">
     <div class="page-header">
@@ -100,6 +84,4 @@ $total = mysqli_num_rows($query);
     </div>
   </div>
 
-</div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>

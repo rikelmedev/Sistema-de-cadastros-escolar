@@ -16,24 +16,7 @@ function opcoes_disciplinas($disciplinas) {
   }
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Cursos — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-  <div class="container">
-
-    <div class="sys-header">
-      <div class="sys-logo">SE</div>
-      <div>
-        <div class="sys-title">Sistema Escolar</div>
-        <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-      </div>
-    </div>
+<?php $titulo = "Cadastro de Cursos"; include 'cabecalho.php'; ?>
 
     <div class="card">
       <div class="card-title">Cadastro de Cursos</div>
@@ -92,6 +75,4 @@ function opcoes_disciplinas($disciplinas) {
       </form>
     </div>
 
-  </div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>

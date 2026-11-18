@@ -47,24 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Aluno — Sistema Escolar</title>
-  <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-<div class="container">
-
-  <div class="sys-header">
-    <div class="sys-logo">SE</div>
-    <div>
-      <div class="sys-title">Sistema Escolar</div>
-      <div class="sys-subtitle">Gestão de alunos, cursos e disciplinas</div>
-    </div>
-  </div>
+<?php $titulo = "Editar Aluno"; include 'cabecalho.php'; ?>
 
   <div class="card">
 
@@ -137,7 +120,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   </div>
 
-</div>
-</body>
-</html>
+<?php include 'rodape.php'; ?>
 <?php mysqli_close($conexao); ?>

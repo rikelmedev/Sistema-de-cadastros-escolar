@@ -122,6 +122,8 @@ sistema-escolar/
 ├── conexao.php                 # Conexão com o banco MySQL
 ├── config.example.php          # Modelo das credenciais (copiar para config.php)
 ├── index.php                   # Menu principal
+├── cabecalho.php               # Cabeçalho compartilhado (incluído em todas as páginas PHP)
+├── rodape.php                  # Rodapé compartilhado (fecha o que o cabeçalho abriu)
 │
 ├── form_aluno.php              # Formulário de cadastro de alunos (lista de cursos vem do banco)
 ├── cadalunos.php               # Processa o cadastro de alunos
@@ -129,7 +131,7 @@ sistema-escolar/
 ├── form_curso.php              # Formulário de cadastro de cursos (lista de disciplinas vem do banco)
 ├── cadcursos.php               # Processa o cadastro de cursos
 │
-├── caddisciplina.html          # Formulário de cadastro de disciplinas
+├── form_disciplina.php         # Formulário de cadastro de disciplinas
 ├── caddisciplina.php           # Processa o cadastro de disciplinas
 │
 ├── pesquisageral.php           # Lista todos os alunos
