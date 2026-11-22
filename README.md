@@ -23,9 +23,13 @@ Permite cadastrar e consultar alunos, cursos e disciplinas através de uma inter
 |---|---|
 | ![Menu principal](screenshots/menu-principal.png) | ![Cadastro de alunos](screenshots/cadastro-aluno.png) |
 
-| Lista geral de alunos | Lista geral de cursos |
+| Lista de alunos (com editar e excluir) | Pesquisa por nome |
 |---|---|
-| ![Lista de alunos](screenshots/lista-alunos.png) | ![Lista de cursos](screenshots/lista-cursos.png) |
+| ![Lista de alunos](screenshots/lista-alunos.png) | ![Pesquisa de alunos](screenshots/pesquisa-alunos.png) |
+
+| Cadastro de cursos (disciplinas N:N) | Lista de cursos |
+|---|---|
+| ![Cadastro de cursos](screenshots/cadastro-curso.png) | ![Lista de cursos](screenshots/lista-cursos.png) |
 
 ---
 
