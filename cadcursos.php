@@ -8,39 +8,56 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 include_once('conexao.php');
 
 //RECUPERAÇÃO DOS DADOS DO FORMULÁRIO
-$codigo    = $_POST['codcurso'];
-$nomecurso = $_POST['nomecurso'];
-$cod1      = $_POST['coddisciplina1'];
-$cod2      = $_POST['coddisciplina2'];
-$cod3      = $_POST['coddisciplina3'];
+$codigo      = $_POST['codcurso'];
+$nomecurso   = $_POST['nomecurso'];
+//disciplinas[] CHEGA COMO LISTA COM OS CODIGOS DAS CAIXAS MARCADAS
+$disciplinas = isset($_POST['disciplinas']) ? array_unique((array) $_POST['disciplinas']) : array();
 
-//CRIANDO LINHA DO INSERT (PREPARED STATEMENT)
-$stmt = mysqli_prepare($conexao,
-  "INSERT INTO curso (codcurso, nome, coddisciplina01, coddisciplina02, coddisciplina03) VALUES (?, ?, ?, ?, ?)"
-);
-mysqli_stmt_bind_param($stmt, "sssss", $codigo, $nomecurso, $cod1, $cod2, $cod3);
-
-//EXECUÇÃO E VERIFICAÇÃO DO RESULTADO
-$resultado = mysqli_stmt_execute($stmt);
-
-if (!$resultado) {
-  if (mysqli_stmt_errno($stmt) == 1062) {
-    $msg_tipo  = "msg-error";
-    $msg_texto = "Código <strong>" . htmlspecialchars($codigo) . "</strong> já cadastrado. Use outro.";
-  } elseif (mysqli_stmt_errno($stmt) == 1452) {
-    //1452 = ALGUM CODIGO DE DISCIPLINA NAO EXISTE NA TABELA DISCIPLINA
-    $msg_tipo  = "msg-error";
-    $msg_texto = "Uma ou mais disciplinas informadas não existem. Confira os códigos na lista de disciplinas.";
-  } else {
-    $msg_tipo  = "msg-error";
-    $msg_texto = "Erro ao cadastrar. Tente novamente.";
-  }
+if (count($disciplinas) == 0) {
+  $msg_tipo  = "msg-error";
+  $msg_texto = "Marque pelo menos uma disciplina para o curso.";
 } else {
-  $msg_tipo  = "msg-success";
-  $msg_texto = "Curso <strong>" . htmlspecialchars($nomecurso) . "</strong> cadastrado com sucesso!";
-}
+  //TRANSACAO: O CURSO E AS DISCIPLINAS SAO GRAVADOS JUNTOS.
+  //SE QUALQUER INSERT FALHAR, O ROLLBACK DESFAZ TUDO E NADA FICA PELA METADE.
+  mysqli_begin_transaction($conexao);
 
-mysqli_stmt_close($stmt);
+  $stmt = mysqli_prepare($conexao, "INSERT INTO curso (codcurso, nome) VALUES (?, ?)");
+  mysqli_stmt_bind_param($stmt, "ss", $codigo, $nomecurso);
+  $ok   = mysqli_stmt_execute($stmt);
+  $erro = mysqli_stmt_errno($stmt);
+  mysqli_stmt_close($stmt);
+
+  //UMA LINHA EM curso_disciplina PARA CADA DISCIPLINA MARCADA
+  if ($ok) {
+    $stmt = mysqli_prepare($conexao, "INSERT INTO curso_disciplina (codcurso, coddisciplina) VALUES (?, ?)");
+    foreach ($disciplinas as $coddisciplina) {
+      mysqli_stmt_bind_param($stmt, "ss", $codigo, $coddisciplina);
+      if (!mysqli_stmt_execute($stmt)) {
+        $ok   = false;
+        $erro = mysqli_stmt_errno($stmt);
+        break;
+      }
+    }
+    mysqli_stmt_close($stmt);
+  }
+
+  if ($ok) {
+    mysqli_commit($conexao);
+    $msg_tipo  = "msg-success";
+    $msg_texto = "Curso <strong>" . htmlspecialchars($nomecurso) . "</strong> cadastrado com sucesso!";
+  } else {
+    mysqli_rollback($conexao);
+    $msg_tipo = "msg-error";
+    if ($erro == 1062) {
+      $msg_texto = "Código <strong>" . htmlspecialchars($codigo) . "</strong> já cadastrado. Use outro.";
+    } elseif ($erro == 1452) {
+      //1452 = ALGUM CODIGO DE DISCIPLINA NAO EXISTE NA TABELA DISCIPLINA
+      $msg_texto = "Uma ou mais disciplinas informadas não existem. Confira a lista de disciplinas.";
+    } else {
+      $msg_texto = "Erro ao cadastrar. Tente novamente.";
+    }
+  }
+}
 
 mysqli_close($conexao);
 ?>

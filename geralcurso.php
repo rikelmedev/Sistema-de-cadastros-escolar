@@ -5,18 +5,17 @@ include_once('conexao.php');
 $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
 
 //EXECUÇÃO DA CONSULTA SQL
-//A TABELA DISCIPLINA ENTRA 3 VEZES (d1, d2, d3), UMA PARA CADA COLUNA DE DISCIPLINA DO CURSO
+//O JOIN PASSA PELA TABELA DE LIGACAO curso_disciplina PARA CHEGAR NAS DISCIPLINAS.
+//GROUP_CONCAT JUNTA OS NOMES DAS DISCIPLINAS DE CADA CURSO NUM TEXTO SO ("A, B, C").
 //COM A BUSCA VAZIA, O LIKE FICA '%%' E TRAZ TODOS OS CURSOS
 $stmt = mysqli_prepare($conexao,
   "SELECT c.codcurso, c.nome,
-          d1.nome_disciplina AS disciplina1,
-          d2.nome_disciplina AS disciplina2,
-          d3.nome_disciplina AS disciplina3
+          GROUP_CONCAT(d.nome_disciplina ORDER BY d.nome_disciplina SEPARATOR ', ') AS disciplinas
    FROM curso c
-   LEFT JOIN disciplina d1 ON d1.coddisciplina = c.coddisciplina01
-   LEFT JOIN disciplina d2 ON d2.coddisciplina = c.coddisciplina02
-   LEFT JOIN disciplina d3 ON d3.coddisciplina = c.coddisciplina03
+   LEFT JOIN curso_disciplina cd ON cd.codcurso = c.codcurso
+   LEFT JOIN disciplina d        ON d.coddisciplina = cd.coddisciplina
    WHERE c.nome LIKE CONCAT('%', ?, '%')
+   GROUP BY c.codcurso, c.nome
    ORDER BY c.nome"
 );
 mysqli_stmt_bind_param($stmt, "s", $busca);
@@ -63,11 +62,9 @@ $total = mysqli_num_rows($query);
       <table class="result-table">
         <thead>
           <tr>
-            <th>Cód. Curso</th>
+            <th>Código</th>
             <th>Nome</th>
-            <th>Disciplina 01</th>
-            <th>Disciplina 02</th>
-            <th>Disciplina 03</th>
+            <th>Disciplinas</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -76,9 +73,7 @@ $total = mysqli_num_rows($query);
           <tr>
             <td class="col-code"><?php echo htmlspecialchars($dados['codcurso']); ?></td>
             <td><?php echo htmlspecialchars($dados['nome']); ?></td>
-            <td><?php echo htmlspecialchars($dados['disciplina1']); ?></td>
-            <td><?php echo htmlspecialchars($dados['disciplina2']); ?></td>
-            <td><?php echo htmlspecialchars($dados['disciplina3']); ?></td>
+            <td><?php echo htmlspecialchars($dados['disciplinas']); ?></td>
             <td>
               <!-- Editar abre o formulario preenchido; Excluir pede confirmacao antes de enviar -->
               <div class="acoes">

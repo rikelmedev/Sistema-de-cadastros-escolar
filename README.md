@@ -42,7 +42,7 @@ Permite cadastrar e consultar alunos, cursos e disciplinas através de uma inter
 
 ## 🗄️ Estrutura do banco de dados
 
-O banco `escola` possui 3 tabelas:
+O banco `escola` possui 4 tabelas:
 
 ```
 aluno
@@ -50,19 +50,24 @@ aluno
 ├── nome
 ├── endereco
 ├── cidade
-└── codcurso (referência ao curso)
+└── codcurso (FK → curso)
 
 curso
 ├── codcurso (PK)
-├── nome
-├── coddisciplina01
-├── coddisciplina02
-└── coddisciplina03
+└── nome
 
 disciplina
 ├── coddisciplina (PK)
 └── nome_disciplina
+
+curso_disciplina              (ligação N:N entre curso e disciplina)
+├── codcurso (PK, FK → curso)
+└── coddisciplina (PK, FK → disciplina)
 ```
+
+Um curso pode ter quantas disciplinas precisar, e uma disciplina pode estar em vários cursos.
+Excluir um curso remove as ligações dele automaticamente (`ON DELETE CASCADE`), e o banco
+impede excluir uma disciplina que ainda faz parte de algum curso.
 
 ---
 
@@ -182,6 +187,8 @@ Ao revisitar o projeto, identifiquei problemas e apliquei correções:
 - Tratamento de erros do banco (código 1062 = chave primária duplicada)
 - Organização e padronização visual com CSS centralizado
 - Importância de mensagens de feedback claras para o usuário
+- Normalização do banco: troquei as colunas fixas `coddisciplina01/02/03` por uma tabela de ligação N:N (`curso_disciplina`), tirando o limite de 3 disciplinas por curso
+- Transações (`BEGIN` / `COMMIT` / `ROLLBACK`) para gravar o curso e suas disciplinas juntos, sem deixar dados pela metade
 
 ---
 

@@ -3,30 +3,62 @@ include_once('conexao.php');
 
 //SE O FORMULARIO FOI ENVIADO (POST), SALVA AS ALTERACOES
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $codigo    = $_POST['codcurso'];
-  $nomecurso = $_POST['nomecurso'];
-  $cod1      = $_POST['coddisciplina1'];
-  $cod2      = $_POST['coddisciplina2'];
-  $cod3      = $_POST['coddisciplina3'];
+  $codigo      = $_POST['codcurso'];
+  $nomecurso   = $_POST['nomecurso'];
+  //disciplinas[] CHEGA COMO LISTA COM OS CODIGOS DAS CAIXAS MARCADAS
+  $disciplinas = isset($_POST['disciplinas']) ? array_unique((array) $_POST['disciplinas']) : array();
 
-  //O CODIGO DO CURSO NAO MUDA: ELE SO IDENTIFICA QUAL CURSO ATUALIZAR
-  $stmt = mysqli_prepare($conexao,
-    "UPDATE curso SET nome = ?, coddisciplina01 = ?, coddisciplina02 = ?, coddisciplina03 = ? WHERE codcurso = ?"
-  );
-  mysqli_stmt_bind_param($stmt, "sssss", $nomecurso, $cod1, $cod2, $cod3, $codigo);
-
-  if (mysqli_stmt_execute($stmt)) {
-    $msg_tipo  = "msg-success";
-    $msg_texto = "Curso <strong>" . htmlspecialchars($nomecurso) . "</strong> atualizado com sucesso!";
-  } elseif (mysqli_stmt_errno($stmt) == 1452) {
-    //1452 = ALGUM CODIGO DE DISCIPLINA NAO EXISTE NA TABELA DISCIPLINA
+  if (count($disciplinas) == 0) {
     $msg_tipo  = "msg-error";
-    $msg_texto = "Uma ou mais disciplinas informadas não existem. Confira os códigos na lista de disciplinas.";
+    $msg_texto = "Marque pelo menos uma disciplina para o curso.";
   } else {
-    $msg_tipo  = "msg-error";
-    $msg_texto = "Erro ao atualizar. Tente novamente.";
+    //TRANSACAO: ATUALIZA O NOME E TROCA AS DISCIPLINAS DE UMA VEZ SO.
+    //SE ALGO FALHAR NO MEIO, O ROLLBACK DEVOLVE O CURSO COMO ESTAVA.
+    mysqli_begin_transaction($conexao);
+
+    //O CODIGO DO CURSO NAO MUDA: ELE SO IDENTIFICA QUAL CURSO ATUALIZAR
+    $stmt = mysqli_prepare($conexao, "UPDATE curso SET nome = ? WHERE codcurso = ?");
+    mysqli_stmt_bind_param($stmt, "ss", $nomecurso, $codigo);
+    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    //APAGA AS LIGACOES ANTIGAS E GRAVA AS MARCADAS AGORA
+    if ($ok) {
+      $stmt = mysqli_prepare($conexao, "DELETE FROM curso_disciplina WHERE codcurso = ?");
+      mysqli_stmt_bind_param($stmt, "s", $codigo);
+      $ok = mysqli_stmt_execute($stmt);
+      mysqli_stmt_close($stmt);
+    }
+
+    $erro = 0;
+    if ($ok) {
+      $stmt = mysqli_prepare($conexao, "INSERT INTO curso_disciplina (codcurso, coddisciplina) VALUES (?, ?)");
+      foreach ($disciplinas as $coddisciplina) {
+        mysqli_stmt_bind_param($stmt, "ss", $codigo, $coddisciplina);
+        if (!mysqli_stmt_execute($stmt)) {
+          $ok   = false;
+          $erro = mysqli_stmt_errno($stmt);
+          break;
+        }
+      }
+      mysqli_stmt_close($stmt);
+    }
+
+    if ($ok) {
+      mysqli_commit($conexao);
+      $msg_tipo  = "msg-success";
+      $msg_texto = "Curso <strong>" . htmlspecialchars($nomecurso) . "</strong> atualizado com sucesso!";
+    } else {
+      mysqli_rollback($conexao);
+      $msg_tipo = "msg-error";
+      if ($erro == 1452) {
+        //1452 = ALGUM CODIGO DE DISCIPLINA NAO EXISTE NA TABELA DISCIPLINA
+        $msg_texto = "Uma ou mais disciplinas informadas não existem. Confira a lista de disciplinas.";
+      } else {
+        $msg_texto = "Erro ao atualizar. Tente novamente.";
+      }
+    }
   }
-  mysqli_stmt_close($stmt);
 
 //SE A PAGINA FOI ABERTA PELA LISTA (GET), BUSCA O CURSO PARA PREENCHER O FORMULARIO
 } else {
@@ -42,19 +74,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $msg_tipo  = "msg-error";
     $msg_texto = "Curso não encontrado.";
   } else {
-    //BUSCA AS DISCIPLINAS UMA VEZ SO E GUARDA NUM ARRAY (USADO NAS 3 LISTAS)
+    //TODAS AS DISCIPLINAS, PARA MONTAR AS CAIXAS DE MARCAR
     $resultado   = mysqli_query($conexao, "SELECT coddisciplina, nome_disciplina FROM disciplina ORDER BY nome_disciplina");
     $disciplinas = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
-  }
-}
 
-//MONTA AS OPCOES DE UMA LISTA DE DISCIPLINAS, MARCANDO A QUE JA ESTA ESCOLHIDA
-function opcoes_disciplinas($disciplinas, $selecionada) {
-  foreach ($disciplinas as $d) {
-    $marcada = ($d['coddisciplina'] == $selecionada) ? ' selected' : '';
-    echo '<option value="' . htmlspecialchars($d['coddisciplina']) . '"' . $marcada . '>'
-       . htmlspecialchars($d['coddisciplina'] . ' — ' . $d['nome_disciplina'])
-       . '</option>';
+    //CODIGOS DAS DISCIPLINAS QUE O CURSO JA TEM (ESSAS CAIXAS VEM MARCADAS)
+    $stmt = mysqli_prepare($conexao, "SELECT coddisciplina FROM curso_disciplina WHERE codcurso = ?");
+    mysqli_stmt_bind_param($stmt, "s", $codigo);
+    mysqli_stmt_execute($stmt);
+    $marcadas = array_column(mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC), 'coddisciplina');
+    mysqli_stmt_close($stmt);
   }
 }
 ?>
@@ -98,28 +127,16 @@ function opcoes_disciplinas($disciplinas, $selecionada) {
         <div class="divider"></div>
         <div class="card-title">Disciplinas vinculadas</div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Disciplina 1</label>
-            <select class="form-input" name="coddisciplina1" required>
-              <?php opcoes_disciplinas($disciplinas, $curso['coddisciplina01']); ?>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Disciplina 2</label>
-            <select class="form-input" name="coddisciplina2" required>
-              <?php opcoes_disciplinas($disciplinas, $curso['coddisciplina02']); ?>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Disciplina 3</label>
-            <select class="form-input" name="coddisciplina3" required>
-              <?php opcoes_disciplinas($disciplinas, $curso['coddisciplina03']); ?>
-            </select>
-          </div>
+        <!-- As disciplinas que o curso ja tem vem marcadas; marque ou desmarque a vontade -->
+        <div class="check-grid">
+          <?php foreach ($disciplinas as $d): ?>
+          <label class="check-item">
+            <input type="checkbox" name="disciplinas[]"
+                   value="<?php echo htmlspecialchars($d['coddisciplina']); ?>"
+                   <?php if (in_array($d['coddisciplina'], $marcadas)) echo 'checked'; ?>>
+            <?php echo htmlspecialchars($d['nome_disciplina']); ?>
+          </label>
+          <?php endforeach; ?>
         </div>
 
         <div class="divider"></div>

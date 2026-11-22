@@ -46,23 +46,41 @@ INSERT INTO `disciplina` (`coddisciplina`, `nome_disciplina`) VALUES
 CREATE TABLE IF NOT EXISTS `curso` (
   `codcurso` int(11) NOT NULL,
   `nome` varchar(30) NOT NULL,
-  `coddisciplina01` int(11) NOT NULL,
-  `coddisciplina02` int(11) NOT NULL,
-  `coddisciplina03` int(11) NOT NULL,
-  PRIMARY KEY (`codcurso`),
-  KEY `coddisciplina01` (`coddisciplina01`),
-  KEY `coddisciplina02` (`coddisciplina02`),
-  KEY `coddisciplina03` (`coddisciplina03`)
+  PRIMARY KEY (`codcurso`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `curso`
 --
 
-INSERT INTO `curso` (`codcurso`, `nome`, `coddisciplina01`, `coddisciplina02`, `coddisciplina03`) VALUES
-(101, 'Informática', 1, 2, 3),
-(102, 'Mecânica', 2, 5, 4),
-(103, 'Química', 6, 2, 1);
+INSERT INTO `curso` (`codcurso`, `nome`) VALUES
+(101, 'Informática'),
+(102, 'Mecânica'),
+(103, 'Química');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `curso_disciplina` (ligação N:N entre curso e disciplina)
+-- Cada linha diz "o curso X tem a disciplina Y". Um curso pode ter quantas
+-- disciplinas precisar, e uma disciplina pode estar em vários cursos.
+--
+
+CREATE TABLE IF NOT EXISTS `curso_disciplina` (
+  `codcurso` int(11) NOT NULL,
+  `coddisciplina` int(11) NOT NULL,
+  PRIMARY KEY (`codcurso`, `coddisciplina`),
+  KEY `coddisciplina` (`coddisciplina`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `curso_disciplina`
+--
+
+INSERT INTO `curso_disciplina` (`codcurso`, `coddisciplina`) VALUES
+(101, 1), (101, 2), (101, 3),
+(102, 2), (102, 5), (102, 4),
+(103, 6), (103, 2), (103, 1);
 
 -- --------------------------------------------------------
 
@@ -83,12 +101,13 @@ CREATE TABLE IF NOT EXISTS `aluno` (
 -- --------------------------------------------------------
 
 --
--- Restrições para tabela `curso`
+-- Restrições para tabela `curso_disciplina`
+-- ON DELETE CASCADE: ao excluir um curso, as ligações dele somem junto.
+-- A disciplina não tem CASCADE: o banco impede excluir disciplina usada em algum curso.
 --
-ALTER TABLE `curso`
-  ADD CONSTRAINT `curso_disciplina01_fk` FOREIGN KEY (`coddisciplina01`) REFERENCES `disciplina` (`coddisciplina`),
-  ADD CONSTRAINT `curso_disciplina02_fk` FOREIGN KEY (`coddisciplina02`) REFERENCES `disciplina` (`coddisciplina`),
-  ADD CONSTRAINT `curso_disciplina03_fk` FOREIGN KEY (`coddisciplina03`) REFERENCES `disciplina` (`coddisciplina`);
+ALTER TABLE `curso_disciplina`
+  ADD CONSTRAINT `cd_curso_fk` FOREIGN KEY (`codcurso`) REFERENCES `curso` (`codcurso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cd_disciplina_fk` FOREIGN KEY (`coddisciplina`) REFERENCES `disciplina` (`coddisciplina`);
 
 --
 -- Restrições para tabela `aluno`
